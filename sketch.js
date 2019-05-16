@@ -23,29 +23,62 @@ function draw() {
 
     background(11);
 
-    sectors[ship.sector - 1].draw();
-    sectors[ship.sector - 1].update(deltaTime);
+    sectors[ship.sector].draw();
+    sectors[ship.sector].update(deltaTime);
 
     ship.draw();
     ship.update(deltaTime);
 
     map.draw();
+
+    warp();
 }
 
+
+//If ship reaches edge of sector, go to the adjacent one
 function warp(){
-    //If ship reaches edge of sector, go to the adjacent one
+    var gridx = ship.sector % 8;
+    var gridy = floor(ship.sector / 8);
+
+    var newSector = ship.sector;
     if(ship.pos.x < 0){
+      if(gridx == 0){
+        ship.pos.x = 0;
+        return;
+      }
 
+      ship.pos.x = width;
+      newSector = ship.sector - 1;
     }else if(ship.pos.x > width){
+      if(gridx == 7){
+        ship.pos.x = width;
+        return;
+      }
 
+      ship.pos.x = 0;
+      newSector = ship.sector + 1;
     }else if(ship.pos.y < 0){
+      if(gridy == 0){
+        ship.pos.y = 0;
+        return;
+      }
 
+      ship.pos.y = height;
+      newSector = ship.sector - 8;
     }else if(ship.pos.y > height){
-        
+      if(gridy == 7){
+        ship.pos.y = height;
+        return;
+      }
+
+      ship.pos.y = 0;
+      newSector = ship.sector + 8;
+    }else{
+      return;
     }
 
-
-
+    ship.sector = newSector;
+    map.enter(newSector);
 }
 
 function generateSectors(){

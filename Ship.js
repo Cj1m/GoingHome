@@ -9,14 +9,14 @@ function Ship(){
     this.animationIndex = 0;
     this.animationSpeed = 0.25;
 
-    this.sector = 1;
+    this.sector = 0;
     this.pos = createVector(width/2,height - 30);
     this.vel = createVector(0,0);
     this.size = 80;
 
     this.hull = 100;
 
-    this.engine = 1;
+    this.engine = 3;
 
     this.angle = 0;
     this.rotationSpeed = 0.1;

@@ -2,7 +2,7 @@ function Map(size, sectors){
         this.size = size;
         this.sectors = sectors;
         this.boxes = [];
-        this.explored = [0,1,8,9,2];
+        this.explored = [0];
         this.playerIn = 0;
 
         this.boxSize = this.size / sqrt(this.sectors)
@@ -14,8 +14,8 @@ function Map(size, sectors){
             stroke(255);
 
             for(var i = 0; i < this.sectors; i++){
-                var gridx = floor(i / 8);
-                var gridy = i % 8;
+                var gridx = i % 8;
+                var gridy = floor(i / 8);
 
                 var x = (gridx * this.boxSize);
                 var y = (gridy * this.boxSize);
@@ -33,5 +33,11 @@ function Map(size, sectors){
             pop();
         }
 
+        this.enter = function(sector){
+          this.playerIn = sector;
+          if(!this.explored.includes(sector)){
+            this.explored.push(sector);
+          }
+        }
 
 }
