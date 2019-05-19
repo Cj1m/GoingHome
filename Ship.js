@@ -10,11 +10,12 @@ function Ship(){
     this.animationSpeed = 0.25;
 
     this.sector = 0;
-    this.pos = createVector(width/2,height - 30);
-    this.vel = createVector(0,0);
+    this.pos = 0;
+    this.vel = 0;
     this.size = 80;
 
-    this.hull = 100;
+    this.hull = 15;
+    this.IMGS_HULL = [];
 
     this.engine = 3;
 
@@ -22,20 +23,35 @@ function Ship(){
     this.rotationSpeed = 0.1;
     this.accelerating = false;
 
-    this.setup = function(){
-        this.IMGS_IDLE = [loadImage("imgs/ship.png")];
+    this.polygon = [];
 
-        for(var i = 1; i <= 8; i++){
-            this.IMGS_ZOOM.push(loadImage("imgs/ship_forward/"+i+".png"));
-            this.IMGS_TURN_LEFT.push(loadImage("imgs/ship_left/"+i+".png"));
-            this.IMGS_TURN_RIGHT.push(loadImage("imgs/ship_right/"+i+".png"));
-        }
+    this.preload = function(){
+      this.IMGS_IDLE = [loadImage("imgs/ship.png")];
 
-        this.imgSet = this.IMGS_ZOOM;
+      this.IMGS_ZOOM = this.loadImages("imgs/ship_forward/",8);
+      this.IMGS_TURN_LEFT = this.loadImages("imgs/ship_left/",8);
+      this.IMGS_TURN_RIGHT = this.loadImages("imgs/ship_right/",8);
+      this.IMGS_HULL = this.loadImages("imgs/ui/hull/",16);
+
+      this.imgSet = this.IMGS_ZOOM;
     }
 
-    this.update = function(dt){
+    this.setup = function(){
+        this.pos = createVector(width/2,height - 30);
+        this.vel = createVector(0,0);
+
+        this.fixImagesSize(this.IMGS_IDLE);
+        this.fixImagesSize(this.IMGS_ZOOM);
+        this.fixImagesSize(this.IMGS_TURN_LEFT);
+        this.fixImagesSize(this.IMGS_TURN_RIGHT);
+
+        this.polygon = new PolygonGenerator().generate(this.IMGS_IDLE[0], this.size);
+    }
+
+    this.update = function(dt, spaceObjects){
         this.vel.mult(0.99);
+
+        this.collision(spaceObjects);
 
         this.pos.add(this.vel);
 
@@ -44,12 +60,18 @@ function Ship(){
 
     this.draw = function(){
         push();
+            //UI should be its own class but I'm lazy
+            image(this.IMGS_HULL[this.hull], 10, height - 61 , 204,61);
+
             translate(this.pos.x, this.pos.y);
+
             imageMode(CENTER);
 
             rotate(this.angle);
             this.animate();
-            image(this.imgSet[this.animationIndex], 0, 0, this.size, this.size);
+
+            image(this.imgSet[this.animationIndex], 0, 0);
+            this.polygon.draw();
         pop();
     }
 
@@ -86,5 +108,26 @@ function Ship(){
             accelerationVec = createVector(acceleration * sin(this.angle), -acceleration * cos(this.angle));
             this.vel.add(accelerationVec);
         }
+    }
+
+    this.collision = function(spaceObjects){
+      for(var i = 0; i < spaceObjects.length; i++){
+
+        //hit = collidePolyPoly(poly,randomPoly,true);
+      }
+    }
+
+    this.loadImages = function(path, images){
+      var imageArr = [];
+      for(var i = 1; i <= images; i++){
+          imageArr.push(loadImage(path+i+".png"));
+      }
+      return imageArr;
+    }
+
+    this.fixImagesSize = function(imageArr){
+      for(var i = 0; i < imageArr.length; i++){
+        imageArr[i].resize(this.size, this.size);
+      }
     }
 }

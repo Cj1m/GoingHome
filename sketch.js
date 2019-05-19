@@ -4,13 +4,17 @@ var map;
 var sectors = [];
 var canvas;
 
+function preload(){
+  ship = new Ship();
+  ship.preload();
+
+  generateSectors();
+}
+
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
 
-  generateSectors();
-  console.log(sectors);
-
-  ship = new Ship();
+  setupSectors();
   ship.setup();
 
   map = new Map(128, sectors.length);
@@ -27,7 +31,7 @@ function draw() {
     sectors[ship.sector].update(deltaTime);
 
     ship.draw();
-    ship.update(deltaTime);
+    ship.update(deltaTime,sectors[ship.sector].objects);
 
     map.draw();
 
@@ -89,4 +93,10 @@ function generateSectors(){
 
         sectors.push(newSector);
     }
+}
+
+function setupSectors(){
+  for(var i = 0; i < 64; i++){
+    sectors[i].setup();
+  }
 }

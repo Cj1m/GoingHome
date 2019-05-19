@@ -1,5 +1,5 @@
-function SpaceObject(objID, quantity, pos){
-    this.pos = pos;
+function SpaceObject(objID, quantity){
+    this.pos = createVector(0,0);
     this.vel = createVector(0,0);
     this.size = 50;
     this.quantity = quantity;
@@ -11,6 +11,7 @@ function SpaceObject(objID, quantity, pos){
     this.animated = false;
     this.rotationSpeed = random(-0.01,0.01);
     this.angle = 0;
+    this.polygon = [];
 
     this.toDraw = false;
     this.name = "";
@@ -19,10 +20,22 @@ function SpaceObject(objID, quantity, pos){
     switch(objID){
         case 0:
             //Asteroid
-            this.name = "Asteroid";
-            var r = random([1,2,3,4]);
-            this.toDraw = true;
-            this.imgSet = [loadImage("imgs/objects/asteroids/"+r+".png")];
+            this.preload = function(){
+              var r = random([1,2,3,4]);
+              this.imgSet = [loadImage("imgs/objects/asteroids/"+r+".png")];
+            }
+
+            this.setup = function(pos){
+              this.name = "Asteroid";
+
+              this.pos = pos;
+
+              this.fixImagesSize(this.imgSet);
+
+              this.polygon = new PolygonGenerator().generate(this.imgSet[0], this.size*this.quantity);
+              this.toDraw = true;
+            }
+
             break;
         case 1:
             //Hydrogen
@@ -68,7 +81,10 @@ function SpaceObject(objID, quantity, pos){
 
             rotate(this.angle);
             if(this.animated) this.animate();
-            image(this.imgSet[this.animationIndex], 0, 0, this.size*this.quantity, this.size*this.quantity);
+            image(this.imgSet[this.animationIndex], 0, 0);
+            fill(255,0,0);
+            
+            this.polygon.draw();
         pop();
     }
 
@@ -83,5 +99,11 @@ function SpaceObject(objID, quantity, pos){
         this.pos.add(this.vel);
 
         this.angle = (this.angle + this.rotationSpeed) % (2 * PI);
+    }
+
+    this.fixImagesSize = function(imageArr){
+      for(var i = 0; i < imageArr.length; i++){
+        imageArr[i].resize(this.size*this.quantity, this.size*this.quantity);
+      }
     }
 }

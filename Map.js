@@ -7,7 +7,6 @@ function Map(size, sectors){
 
         this.boxSize = this.size / sqrt(this.sectors)
 
-        console.log((width - this.size));
         this.draw = function(){
             push();
             translate((width - this.size) - 10, (height - this.size) - 10);
