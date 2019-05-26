@@ -71,7 +71,7 @@ function Ship(){
             this.animate();
 
             image(this.imgSet[this.animationIndex], 0, 0);
-            this.polygon.draw();
+
         pop();
     }
 
@@ -111,11 +111,16 @@ function Ship(){
     }
 
     this.collision = function(spaceObjects){
+      var transShipPoly = this.polygon.getTranslatedPoly(this.angle, this.pos);
       for(var i = 0; i < spaceObjects.length; i++){
-
-        //hit = collidePolyPoly(poly,randomPoly,true);
+        var transSpacePoly = spaceObjects[i].getTranslatedPoly();
+        hit = collidePolyPoly(transShipPoly,transSpacePoly,true);
+        if(hit){
+          this.vel.mult(-1);
+        }
       }
     }
+
 
     this.loadImages = function(path, images){
       var imageArr = [];

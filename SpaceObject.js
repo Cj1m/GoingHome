@@ -83,8 +83,8 @@ function SpaceObject(objID, quantity){
             if(this.animated) this.animate();
             image(this.imgSet[this.animationIndex], 0, 0);
             fill(255,0,0);
-            
-            this.polygon.draw();
+
+            //this.polygon.draw();
         pop();
     }
 
@@ -105,5 +105,9 @@ function SpaceObject(objID, quantity){
       for(var i = 0; i < imageArr.length; i++){
         imageArr[i].resize(this.size*this.quantity, this.size*this.quantity);
       }
+    }
+
+    this.getTranslatedPoly = function(){
+      return this.polygon.getTranslatedPoly(this.angle, this.pos);
     }
 }
