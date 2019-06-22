@@ -84,7 +84,7 @@ function SpaceObject(objID, quantity){
             image(this.imgSet[this.animationIndex], 0, 0);
             fill(255,0,0);
 
-            //this.polygon.draw();
+            this.polygon.draw();
         pop();
     }
 

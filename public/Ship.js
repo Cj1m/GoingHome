@@ -1,6 +1,8 @@
 function Ship(){
-    this.imgSet = [];
+    this.id = "DEFINED BY SERVER";
+    this.sketch = [];
 
+    this.imgSet = [];
     this.IMGS_TURN_LEFT = [];
     this.IMGS_TURN_RIGHT = [];
     this.IMGS_ZOOM = [];
@@ -24,6 +26,9 @@ function Ship(){
     this.accelerating = false;
 
     this.polygon = [];
+
+    this.combatLaserReady = true;
+    this.combatLaserFireRate = 3;
 
     this.preload = function(){
       this.IMGS_IDLE = [loadImage("imgs/ship.png")];
@@ -53,12 +58,14 @@ function Ship(){
 
         this.collision(spaceObjects);
 
+
         this.pos.add(this.vel);
 
         this.keyDown();
     }
 
     this.draw = function(){
+        this.drawLasers();
         push();
             //UI should be its own class but I'm lazy
             image(this.IMGS_HULL[this.hull], 10, height - 61 , 204,61);
@@ -71,7 +78,7 @@ function Ship(){
             this.animate();
 
             image(this.imgSet[this.animationIndex], 0, 0);
-
+            this.polygon.draw();
         pop();
     }
 
@@ -94,7 +101,24 @@ function Ship(){
             this.imgSet = this.IMGS_IDLE;
         }
 
+        //Lasers
+        if(keyIsDown(70)){
+          //F - combat laser
+          this.fireCombatLaser();
+        }else if(keyIsDown(69)){
+          //E - mining laser
+        }
+
         this.angle = this.angle % (2 * PI);
+    }
+
+    this.fireCombatLaser = function(){
+      if(this.combatLaserReady){
+        this.combatLaserReady = false;
+        lasers.push(new CombatLaser(this.id, this.angle, this.pos, 0, this.sector));
+        var self = this;
+        setTimeout(function(){self.combatLaserReady = true;}, 1000 / this.combatLaserFireRate);
+      }
     }
 
     this.zoom = function(){
@@ -110,12 +134,21 @@ function Ship(){
         }
     }
 
+    this.takeDamage = function(damage){
+      if(Math.floor(this.hull - damage) > 0){
+        this.hull = Math.floor(this.hull - damage);
+      }else{
+        this.hull = 0;
+      }
+    }
+
     this.collision = function(spaceObjects){
       var transShipPoly = this.polygon.getTranslatedPoly(this.angle, this.pos);
       for(var i = 0; i < spaceObjects.length; i++){
         var transSpacePoly = spaceObjects[i].getTranslatedPoly();
         hit = collidePolyPoly(transShipPoly,transSpacePoly,true);
         if(hit){
+          this.takeDamage(1 + Math.floor(0.4 * this.vel.mag()));
           this.vel.mult(-1);
         }
       }
@@ -133,6 +166,25 @@ function Ship(){
     this.fixImagesSize = function(imageArr){
       for(var i = 0; i < imageArr.length; i++){
         imageArr[i].resize(this.size, this.size);
+      }
+    }
+
+    this.drawLasers = function(){
+      var toBeRemoved = [];
+      for(var i = 0; i < lasers.length; i++){
+        if(lasers[i].sector == this.sector){
+          lasers[i].draw();
+        }else{
+          lasers[i].update();
+        }
+
+        if(lasers[i].offScreen()){
+          toBeRemoved.push(i);
+        }
+      }
+
+      for(var i = 0; i < toBeRemoved.length; i++){
+        lasers.splice(toBeRemoved[i],1);
       }
     }
 }

@@ -21,8 +21,8 @@ function Sector(){
     }
 
     this.generate = function(){
-        var n = random([1,2,3,4,5,6,7,8,9]);
-
+        //var n = random([1,2,3,4,5,6,7,8,9]);
+        var n = 9;
         for(var i = 0; i < n; i++){
             var randID = Math.floor(random(0, 1));
             var randQuant = random([1,1,1,1,2,2,3]);

@@ -1,7 +1,10 @@
+//These variables are public and can be accessed throughout
 var ship;
 var map;
+var network;
 
 var sectors = [];
+var lasers = [];
 var canvas;
 
 function preload(){
@@ -14,8 +17,10 @@ function preload(){
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
 
+  network = new Network();
+
   setupSectors();
-  ship.setup();
+  ship.setup(network);
 
   map = new Map(128, sectors.length);
 

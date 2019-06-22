@@ -14,8 +14,8 @@ function PolygonGenerator(){
     var pixels = image.pixels;
 
     var polygonPoints = [];
-    for(var x = 0; x < image.width; x++){
-      for(var y = 0; y < image.height; y++){
+    for(var x = 0; x < image.width - 1; x++){
+      for(var y = 0; y < image.height - 1; y+=2){
         var alphaIndex = 4 * (x + y * image.width) + 3;
         var alpha = pixels[alphaIndex];
 
@@ -51,7 +51,31 @@ function PolygonGenerator(){
       }
     }
 
+    polygonPoints = this.sortPolygonPoints(polygonPoints);
     return polygonPoints;
+  }
+
+  this.sortPolygonPoints = function(polyP){
+    var newPolyP = [];
+    newPolyP.push(polyP[0]);
+
+    while(newPolyP.length != polyP.length){
+      var minDist = Infinity;
+      var minDistVec = Infinity;
+      for(var i = 1; i < polyP.length; i++){
+        if(newPolyP.includes(polyP[i]) || newPolyP[newPolyP.length - 1] == polyP[i]) continue;
+
+        var dist = newPolyP[newPolyP.length - 1].dist(polyP[i]);
+        if(dist < minDist){
+          minDist = dist;
+          minDistVec = polyP[i];
+        }
+      }
+
+      newPolyP.push(minDistVec);
+    }
+
+    return newPolyP;
   }
 
   this.pixelAt = function(x,y,image){
