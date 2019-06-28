@@ -1,34 +1,32 @@
-function SpaceObject(objID, quantity){
+function SpaceObject(specs){
     this.pos = createVector(0,0);
     this.vel = createVector(0,0);
     this.size = 50;
-    this.quantity = quantity;
+    this.quantity = specs.quantity;
 
     this.imgSet;
     this.realAnimationIndex = 0;
     this.animationIndex = 0;
     this.animationSpeed = 0.25;
     this.animated = false;
-    this.rotationSpeed = random(-0.01,0.01);
+    this.rotationSpeed = specs.rotationSpeed;
     this.angle = 0;
     this.polygon = [];
 
     this.toDraw = false;
-    this.name = "";
+    this.name = specs.traits.name;
 
 
-    switch(objID){
+    switch(specs.id){
         case 0:
             //Asteroid
             this.preload = function(){
-              var r = random([1,2,3,4]);
-              this.imgSet = [loadImage("imgs/objects/asteroids/"+r+".png")];
+              var img = specs.traits.type;
+              this.imgSet = [loadImage("imgs/objects/asteroids/"+img+".png")];
             }
 
-            this.setup = function(pos){
-              this.name = "Asteroid";
-
-              this.pos = pos;
+            this.setup = function(){
+              this.pos = createVector(specs.position.x, specs.position.y);
 
               this.fixImagesSize(this.imgSet);
 
@@ -39,38 +37,29 @@ function SpaceObject(objID, quantity){
             break;
         case 1:
             //Hydrogen
-            this.name = "Hydrogen";
             break;
         case 2:
             //Iron
-            this.name = "Iron";
             break;
         case 3:
             //Water
-            this.name = "Water";
             break;
         case 4:
             //Dark Matter
-            this.name = "Dark Matter";
             break;
         case 5:
             //Anti-Matter
-            this.name = "Anti Matter";
             break;
         case 6:
             //Abandoned Ship
-            this.name = "Abandoned Ship";
             break;
         case 7:
             //Black Hole
-            this.name = "Black Hole";
             break;
         case 8:
             //Worm Hole
-            this.name = "Worm Hole";
             break;
     }
-
 
     this.draw = function(){
         if(!this.toDraw) return;

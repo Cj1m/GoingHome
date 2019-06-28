@@ -1,0 +1,28 @@
+{
+  "name": "goinghome",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cj1m/GoingHome.git"
+  },
+  "author": "Christopher McKay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Cj1m/GoingHome/issues"
+  },
+  "homepage": "https://github.com/Cj1m/GoingHome#readme",
+  "dependencies": {
+    "chance": "^1.0.18",
+    "express": "^4.17.1",
+    "http": "0.0.0",
+    "socket.io": "^2.2.0"
+  }
+}

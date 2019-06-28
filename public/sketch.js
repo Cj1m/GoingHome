@@ -7,17 +7,25 @@ var sectors = [];
 var lasers = [];
 var canvas;
 
+var ready = false;
+
 function preload(){
+  network = new Network();
   ship = new Ship();
   ship.preload();
+}
 
-  generateSectors();
+function prepare(data){
+    generateSectors(data.sectors);
+    ready = true;
 }
 
 function setup() {
-  canvas = createCanvas(windowWidth, windowHeight);
+  if(!ready){
+      return setTimeout(this, 100);
+  }
 
-  network = new Network();
+  canvas = createCanvas(windowWidth, windowHeight);
 
   setupSectors();
   ship.setup(network);
@@ -90,11 +98,11 @@ function warp(){
     map.enter(newSector);
 }
 
-function generateSectors(){
-    //8x8 grid
-    for(var i = 0; i < 64; i++){
+function generateSectors(sectorsSpecs){
+    console.log(sectorsSpecs);
+    for(var i = 0; i < sectorsSpecs.length; i++){
         var newSector = new Sector();
-        newSector.generate();
+        newSector.generate(sectorsSpecs[i]);
 
         sectors.push(newSector);
     }

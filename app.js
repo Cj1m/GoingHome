@@ -2,9 +2,10 @@ let express = require('express');
 let app = express();
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
+let chance = new require('chance')();
 
 let players = {};
-let sectors = [];
+let sectors = require('./SectorsGenerator').generate();
 let lasers = [];
 
 app.use(express.static('public'));
@@ -15,6 +16,7 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
     console.log("New connection");
+    socket.emit('prepare',{"sectors": sectors});
     socket.on('test', function(msg){
         socket.emit('test', 'hello client');
     });
