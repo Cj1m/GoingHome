@@ -2,7 +2,7 @@
     let sectorSize =  64;  // Must be a square number
     let sectorQuantityWeights = [0.05, 0.1, 0.2,0.4,0.2,0.05];
 
-    let spaceObjectRange = {minX:30,minY:30,maxX:800,maxY:800};    // Spawn range for space objects
+    let spaceObjectRange = {minX:30,minY:30,maxX:1000,maxY:1000};    // Spawn range for space objects
     let spaceObjectQuantityWeights = [0.6, 0.3, 0.1];
 
     exports.generate = function(){

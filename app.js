@@ -14,9 +14,14 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/sector/:id', function(req, res){
+    res.send(sectors[req.params['id']])
+})
+
 io.on('connection', function(socket){
     console.log("New connection");
     socket.emit('prepare',{"sectors": sectors});
+
     socket.on('test', function(msg){
         socket.emit('test', 'hello client');
     });

@@ -22,7 +22,10 @@ function SpaceObject(specs){
             //Asteroid
             this.preload = function(){
               var img = specs.traits.type;
-              this.imgSet = [loadImage("imgs/objects/asteroids/"+img+".png")];
+              this.imgSet = [loadImage("imgs/objects/asteroids/"+img+".png", image => {
+                  this.imgSet = [image];
+                  this.setup();
+              })];
             }
 
             this.setup = function(){
@@ -97,6 +100,9 @@ function SpaceObject(specs){
     }
 
     this.getTranslatedPoly = function(){
+      if(!this.toDraw){
+          return null;
+      }
       return this.polygon.getTranslatedPoly(this.angle, this.pos);
     }
 }

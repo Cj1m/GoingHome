@@ -11,7 +11,6 @@ function Network(){
     }
 
     this.socket.on('test', this.testResponse);
-    //this.socket.on('sectors', generateSectors);
     this.socket.on('prepare', prepare);
 
     this.testConnection();

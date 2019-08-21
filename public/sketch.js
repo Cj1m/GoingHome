@@ -7,27 +7,22 @@ var sectors = [];
 var lasers = [];
 var canvas;
 
-var ready = false;
-
 function preload(){
+  generateSectors(64);
   network = new Network();
   ship = new Ship();
   ship.preload();
 }
 
 function prepare(data){
-    generateSectors(data.sectors);
-    ready = true;
+    for(var i = 0 ; i < sectors.length; i++){
+        sectors[i].loadObjects(data.sectors[i].spaceObjects);
+    }
 }
 
 function setup() {
-  if(!ready){
-      return setTimeout(this, 100);
-  }
-
   canvas = createCanvas(windowWidth, windowHeight);
 
-  setupSectors();
   ship.setup(network);
 
   map = new Map(128, sectors.length);
@@ -98,18 +93,9 @@ function warp(){
     map.enter(newSector);
 }
 
-function generateSectors(sectorsSpecs){
-    console.log(sectorsSpecs);
-    for(var i = 0; i < sectorsSpecs.length; i++){
+function generateSectors(mapSize){
+    for(var i = 0; i < mapSize; i++){
         var newSector = new Sector();
-        newSector.generate(sectorsSpecs[i]);
-
         sectors.push(newSector);
     }
-}
-
-function setupSectors(){
-  for(var i = 0; i < 64; i++){
-    sectors[i].setup();
-  }
 }

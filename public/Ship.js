@@ -58,7 +58,6 @@ function Ship(){
 
         this.collision(spaceObjects);
 
-
         this.pos.add(this.vel);
 
         this.keyDown();
@@ -146,6 +145,7 @@ function Ship(){
       var transShipPoly = this.polygon.getTranslatedPoly(this.angle, this.pos);
       for(var i = 0; i < spaceObjects.length; i++){
         var transSpacePoly = spaceObjects[i].getTranslatedPoly();
+        if(!transSpacePoly) continue;
         hit = collidePolyPoly(transShipPoly,transSpacePoly,true);
         if(hit){
           this.takeDamage(1 + Math.floor(0.4 * this.vel.mag()));

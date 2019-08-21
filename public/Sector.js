@@ -1,12 +1,6 @@
 function Sector(){
     this.objects = [];
 
-    this.setup = function(){
-      for(var i = 0; i < this.objects.length; i++){
-        this.objects[i].setup();
-      }
-    }
-
     this.draw = function(){
         for(var i = 0; i < this.objects.length; i++){
             this.objects[i].draw();
@@ -19,12 +13,9 @@ function Sector(){
         }
     }
 
-    this.generate = function(specs){
-        console.log(specs.spaceObjects);
-
-        for(var i = 0; i < specs.spaceObjects.length; i++){
-
-            var obj = new SpaceObject(specs.spaceObjects[i]);
+    this.loadObjects = function(spaceObjects){
+        for(var i = 0; i < spaceObjects.length; i++){
+            var obj = new SpaceObject(spaceObjects[i]);
             obj.preload();
             this.objects.push(obj);
         }
