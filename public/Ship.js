@@ -29,6 +29,7 @@ function Ship(){
 
     this.combatLaserReady = true;
     this.combatLaserFireRate = 3;
+    this.network = null;
 
     this.preload = function(){
       this.IMGS_IDLE = [loadImage("imgs/ship.png")];
@@ -41,9 +42,10 @@ function Ship(){
       this.imgSet = this.IMGS_ZOOM;
     }
 
-    this.setup = function(){
+    this.setup = function(network){
         this.pos = createVector(width/2,height - 30);
         this.vel = createVector(0,0);
+        this.network = network;
 
         this.fixImagesSize(this.IMGS_IDLE);
         this.fixImagesSize(this.IMGS_ZOOM);
@@ -59,6 +61,8 @@ function Ship(){
         this.collision(spaceObjects);
 
         this.pos.add(this.vel);
+
+        this.network.sendPlayerData(this.getData());
 
         this.keyDown();
     }
@@ -186,5 +190,21 @@ function Ship(){
       for(var i = 0; i < toBeRemoved.length; i++){
         lasers.splice(toBeRemoved[i],1);
       }
+    }
+
+    this.getData = function(){
+        return {
+          'id': this.id,
+          'pos': {
+              'x': this.pos.x,
+              'y': this.pos.y
+          },
+          'vel': {
+              'x': this.vel.x,
+              'y': this.vel.y
+          },
+          'sector': this.sector,
+          'angle': this.angle
+        };
     }
 }

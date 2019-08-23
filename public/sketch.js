@@ -22,12 +22,8 @@ function prepare(data){
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
-
   ship.setup(network);
-
   map = new Map(128, sectors.length);
-
-  console.log(sectors[0].objects);
 }
 
 function draw() {
