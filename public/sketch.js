@@ -7,6 +7,8 @@ var sectors = [];
 var lasers = [];
 var canvas;
 
+var players = {};
+
 function preload(){
   generateSectors(64);
   network = new Network();
@@ -34,12 +36,33 @@ function draw() {
     sectors[ship.sector].draw();
     sectors[ship.sector].update(deltaTime);
 
+    drawOtherPlayers();
+
     ship.draw();
     ship.update(deltaTime,sectors[ship.sector].objects);
 
     map.draw();
 
     warp();
+}
+
+function drawOtherPlayers(){
+    for(player in players){
+        if(player.sector == ship.sector){
+            player.draw();
+        }
+    }
+}
+
+function serverUpdate(data){
+    serverPlayers = data.players;
+    for(let id in serverPlayers){
+        if(!(id in players)){
+            players[id] = new Ship();
+        }
+
+        players[id].updateFromServer(serverPlayers[id]);
+    }
 }
 
 

@@ -30,6 +30,7 @@ function Ship(){
     this.combatLaserReady = true;
     this.combatLaserFireRate = 3;
     this.network = null;
+    this.toDraw = false;
 
     this.preload = function(){
       this.IMGS_IDLE = [loadImage("imgs/ship.png")];
@@ -39,7 +40,7 @@ function Ship(){
       this.IMGS_TURN_RIGHT = this.loadImages("imgs/ship_right/",8);
       this.IMGS_HULL = this.loadImages("imgs/ui/hull/",16);
 
-      this.imgSet = this.IMGS_ZOOM;
+      this.imgSet = this.IMGS_IDLE;
     }
 
     this.setup = function(network){
@@ -53,6 +54,7 @@ function Ship(){
         this.fixImagesSize(this.IMGS_TURN_RIGHT);
 
         this.polygon = new PolygonGenerator().generate(this.IMGS_IDLE[0], this.size);
+        this.toDraw = true;
     }
 
     this.update = function(dt, spaceObjects){
@@ -68,6 +70,8 @@ function Ship(){
     }
 
     this.draw = function(){
+        if(!this.toDraw) return;
+
         this.drawLasers();
         push();
             //UI should be its own class but I'm lazy
@@ -206,5 +210,12 @@ function Ship(){
           'sector': this.sector,
           'angle': this.angle
         };
+    }
+
+    this.updateFromServer = function(data){
+        this.pos = createVector(data.pos.x, data.pos.y);
+        this.vel = createVector(data.vel.x, data.vel.y);
+        this.sector = data.sector;
+        this.angle = data.angle;
     }
 }

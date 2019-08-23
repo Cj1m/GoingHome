@@ -6,4 +6,5 @@ function Network(){
     }
 
     this.socket.on('prepare', prepare);
+    this.socket.on('update', serverUpdate)
 }

@@ -24,6 +24,10 @@ app.get('/players', function(req, res){
     res.send(players);
 });
 
+app.get('/other_players/:id', function(req, res){
+    res.send(getPlayersDatas(req.params['id']));
+});
+
 app.get('/player/:id', function(req, res){
     res.send(players[req.params['id']]);
 });
@@ -33,7 +37,12 @@ io.on('connection', function(socket){
     console.log("New connection, id:", id);
 
     generateNewPlayer(id);
-    socket.emit('prepare',{"sectors": sectors});
+    socket.emit('prepare',{'sectors': sectors});
+
+    setInterval(function(){
+        let playersDatas = getPlayersDatas(id);
+        socket.volatile.emit('update', {'players': playersDatas})
+    }, 100);
 
     socket.on('test', function(msg){
         socket.emit('test', 'hello client');
@@ -49,6 +58,12 @@ io.on('connection', function(socket){
     });
 
 });
+
+function getPlayersDatas(id){
+    clonedPlayers = Object.assign({}, players);
+    delete clonedPlayers[id];
+    return clonedPlayers;
+}
 
 function generateNewPlayer(id){
     players[id] = new Player(id);
