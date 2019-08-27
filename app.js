@@ -42,7 +42,7 @@ io.on('connection', function(socket){
     setInterval(function(){
         let playersDatas = getPlayersDatas(id);
         socket.volatile.emit('update', {'players': playersDatas})
-    }, 100);
+    }, 10);
 
     socket.on('test', function(msg){
         socket.emit('test', 'hello client');

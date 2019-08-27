@@ -47,9 +47,9 @@ function draw() {
 }
 
 function drawOtherPlayers(){
-    for(player in players){
-        if(player.sector == ship.sector){
-            player.draw();
+    for(id in players){
+        if(players[id].sector == ship.sector){
+            players[id].draw();
         }
     }
 }
@@ -59,6 +59,8 @@ function serverUpdate(data){
     for(let id in serverPlayers){
         if(!(id in players)){
             players[id] = new Ship();
+            players[id].preload();
+            //players[id].setup(null);
         }
 
         players[id].updateFromServer(serverPlayers[id]);

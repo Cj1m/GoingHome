@@ -39,7 +39,6 @@ function Ship(){
       this.IMGS_TURN_LEFT = this.loadImages("imgs/ship_left/",8);
       this.IMGS_TURN_RIGHT = this.loadImages("imgs/ship_right/",8);
       this.IMGS_HULL = this.loadImages("imgs/ui/hull/",16);
-
       this.imgSet = this.IMGS_IDLE;
     }
 
