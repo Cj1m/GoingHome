@@ -3,6 +3,7 @@ let app = express();
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
 let chance = new require('chance')();
+let port = process.env.PORT || 80;
 
 let Player = require('./Player.js');
 
@@ -73,6 +74,6 @@ function removePlayer(id){
     delete players[id];
 }
 
-http.listen(80, function(){
+http.listen(port, function(){
     console.log("Going Home server running");
 });
