@@ -1,7 +1,6 @@
 //These variables are public and can be accessed throughout
 var ship;
 var ui;
-var map;
 var network;
 var imageLoader;
 
@@ -29,8 +28,7 @@ function setup() {
   imageLoader.setup(ship.size);
   network = new Network();
   ship.setup(network, imageLoader);
-  ui = new UI(ship, imageLoader);
-  map = new Map(128, sectors.length);
+  ui = new UI();
 }
 
 function draw() {
@@ -46,7 +44,6 @@ function draw() {
     ship.draw();
     ship.update(deltaTime,sectors[ship.sector].objects);
 
-    map.draw();
     ui.draw();
 
     warp();
@@ -116,7 +113,7 @@ function warp(){
     }
 
     ship.sector = newSector;
-    map.enter(newSector);
+    ui.map.enter(newSector);
 }
 
 function generateSectors(mapSize){
