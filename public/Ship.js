@@ -3,10 +3,7 @@ function Ship(){
     this.sketch = [];
 
     this.imgSet = [];
-    this.IMGS_TURN_LEFT = [];
-    this.IMGS_TURN_RIGHT = [];
-    this.IMGS_ZOOM = [];
-    this.IMGS_IDLE = [];
+    this.IMGS = {};
     this.realAnimationIndex = 0;
     this.animationIndex = 0;
     this.animationSpeed = 0.25;
@@ -31,11 +28,11 @@ function Ship(){
     this.toDraw = false;
 
     this.setup_images = function(imageLoader){
-      this.IMGS_IDLE = imageLoader.SHIP_IMGS_IDLE;
-      this.IMGS_ZOOM = imageLoader.SHIP_IMGS_ZOOM;
-      this.IMGS_TURN_LEFT = imageLoader.SHIP_IMGS_TURN_LEFT;
-      this.IMGS_TURN_RIGHT = imageLoader.SHIP_IMGS_TURN_RIGHT;
-      this.imgSet = this.IMGS_IDLE;
+      this.IMGS.idle = imageLoader.SHIP_IMGS_IDLE;
+      this.IMGS.zoom = imageLoader.SHIP_IMGS_ZOOM;
+      this.IMGS.left = imageLoader.SHIP_IMGS_TURN_LEFT;
+      this.IMGS.right = imageLoader.SHIP_IMGS_TURN_RIGHT;
+      this.imgSet = this.IMGS.idle;
     }
 
     this.setup = function(network, imageLoader){
@@ -45,7 +42,7 @@ function Ship(){
         this.vel = createVector(0,0);
         this.network = network;
 
-        this.polygon = new PolygonGenerator().generate(this.IMGS_IDLE[0], this.size);
+        this.polygon = new PolygonGenerator().generate(this.IMGS.idle[0], this.size);
         this.toDraw = true;
     }
 
@@ -85,16 +82,16 @@ function Ship(){
 
     this.keyDown = function(){
         if (keyIsDown(LEFT_ARROW)) {
-            this.imgSet = this.IMGS_TURN_LEFT;
+            this.imgSet = this.IMGS.left;
             this.angle -= this.rotationSpeed;
         } else if (keyIsDown(RIGHT_ARROW)) {
-            this.imgSet = this.IMGS_TURN_RIGHT;
+            this.imgSet = this.IMGS.right;
             this.angle += this.rotationSpeed;
         } else if (keyIsDown(UP_ARROW)){
             this.zoom();
         }else{
             this.accelerating = false;
-            this.imgSet = this.IMGS_IDLE;
+            this.imgSet = this.IMGS.idle;
         }
 
         //Lasers
@@ -119,7 +116,7 @@ function Ship(){
 
     this.zoom = function(){
         this.accelerating = true;
-        this.imgSet = this.IMGS_ZOOM;
+        this.imgSet = this.IMGS.zoom;
 
         var topSpeed = this.engine * 2;
         var currentSpeed = this.vel.mag();
@@ -172,6 +169,16 @@ function Ship(){
     }
 
     this.getData = function(){
+        var currentImage = null;
+        if(this.imgSet == this.IMGS.idle){
+            currentImage = 'idle';
+        }else if (this.imgSet == this.IMGS.zoom){
+            currentImage = 'zoom';
+        }else if (this.imgSet == this.IMGS.right){
+            currentImage = 'right';
+        }else if (this.imgSet == this.IMGS.left){
+            currentImage = 'left';
+        }
         return {
           'id': this.id,
           'pos': {
@@ -183,7 +190,8 @@ function Ship(){
               'y': this.vel.y
           },
           'sector': this.sector,
-          'angle': this.angle
+          'angle': this.angle,
+          'image': currentImage
         };
     }
 
@@ -192,5 +200,6 @@ function Ship(){
         this.vel = createVector(data.vel.x, data.vel.y);
         this.sector = data.sector;
         this.angle = data.angle;
+        this.imgSet = this.IMGS[data.image];
     }
 }
