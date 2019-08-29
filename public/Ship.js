@@ -17,8 +17,6 @@ function Ship(){
     this.size = 80;
 
     this.hull = 15;
-    this.IMGS_HULL = [];
-
     this.engine = 3;
 
     this.angle = 0;
@@ -37,7 +35,6 @@ function Ship(){
       this.IMGS_ZOOM = imageLoader.SHIP_IMGS_ZOOM;
       this.IMGS_TURN_LEFT = imageLoader.SHIP_IMGS_TURN_LEFT;
       this.IMGS_TURN_RIGHT = imageLoader.SHIP_IMGS_TURN_RIGHT;
-      this.IMGS_HULL = imageLoader.SHIP_IMGS_HULL;
       this.imgSet = this.IMGS_IDLE;
     }
 
@@ -69,9 +66,6 @@ function Ship(){
 
         this.drawLasers();
         push();
-            //UI should be its own class but I'm lazy
-            image(this.IMGS_HULL[this.hull], 10, height - 61 , 204,61);
-
             translate(this.pos.x, this.pos.y);
 
             imageMode(CENTER);
