@@ -32,25 +32,21 @@ function Ship(){
     this.network = null;
     this.toDraw = false;
 
-    this.preload = function(){
-      this.IMGS_IDLE = [loadImage("imgs/ship.png")];
-
-      this.IMGS_ZOOM = this.loadImages("imgs/ship_forward/",8);
-      this.IMGS_TURN_LEFT = this.loadImages("imgs/ship_left/",8);
-      this.IMGS_TURN_RIGHT = this.loadImages("imgs/ship_right/",8);
-      this.IMGS_HULL = this.loadImages("imgs/ui/hull/",16);
+    this.setup_images = function(imageLoader){
+      this.IMGS_IDLE = imageLoader.SHIP_IMGS_IDLE;
+      this.IMGS_ZOOM = imageLoader.SHIP_IMGS_ZOOM;
+      this.IMGS_TURN_LEFT = imageLoader.SHIP_IMGS_TURN_LEFT;
+      this.IMGS_TURN_RIGHT = imageLoader.SHIP_IMGS_TURN_RIGHT;
+      this.IMGS_HULL = imageLoader.SHIP_IMGS_HULL;
       this.imgSet = this.IMGS_IDLE;
     }
 
-    this.setup = function(network){
+    this.setup = function(network, imageLoader){
+        this.setup_images(imageLoader);
+
         this.pos = createVector(width/2,height - 30);
         this.vel = createVector(0,0);
         this.network = network;
-
-        this.fixImagesSize(this.IMGS_IDLE);
-        this.fixImagesSize(this.IMGS_ZOOM);
-        this.fixImagesSize(this.IMGS_TURN_LEFT);
-        this.fixImagesSize(this.IMGS_TURN_RIGHT);
 
         this.polygon = new PolygonGenerator().generate(this.IMGS_IDLE[0], this.size);
         this.toDraw = true;
@@ -158,21 +154,6 @@ function Ship(){
           this.takeDamage(1 + Math.floor(0.4 * this.vel.mag()));
           this.vel.mult(-1);
         }
-      }
-    }
-
-
-    this.loadImages = function(path, images){
-      var imageArr = [];
-      for(var i = 1; i <= images; i++){
-          imageArr.push(loadImage(path+i+".png"));
-      }
-      return imageArr;
-    }
-
-    this.fixImagesSize = function(imageArr){
-      for(var i = 0; i < imageArr.length; i++){
-        imageArr[i].resize(this.size, this.size);
       }
     }
 

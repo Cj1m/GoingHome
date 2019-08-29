@@ -2,6 +2,7 @@
 var ship;
 var map;
 var network;
+var imageLoader;
 
 var sectors = [];
 var lasers = [];
@@ -11,9 +12,9 @@ var players = {};
 
 function preload(){
   generateSectors(64);
-  network = new Network();
+  imageLoader = new ImageLoader();
+  imageLoader.preload();
   ship = new Ship();
-  ship.preload();
 }
 
 function prepare(data){
@@ -24,7 +25,9 @@ function prepare(data){
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
-  ship.setup(network);
+  imageLoader.setup(ship.size);
+  network = new Network();
+  ship.setup(network, imageLoader);
   map = new Map(128, sectors.length);
 }
 
@@ -59,8 +62,7 @@ function serverUpdate(data){
     for(let id in serverPlayers){
         if(!(id in players)){
             players[id] = new Ship();
-            players[id].preload();
-            //players[id].setup(null);
+            players[id].setup(null, imageLoader);
         }
 
         players[id].updateFromServer(serverPlayers[id]);
