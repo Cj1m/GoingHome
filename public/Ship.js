@@ -135,6 +135,7 @@ function Ship(){
         this.hull = Math.floor(this.hull - damage);
       }else{
         this.hull = 0;
+        window.location.href = 'https://youtu.be/fpK36FZmTFY?t=76';
       }
     }
 
